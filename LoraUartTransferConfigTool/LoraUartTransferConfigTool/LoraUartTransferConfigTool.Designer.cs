@@ -64,6 +64,9 @@
             this.buttonwriteparam = new System.Windows.Forms.Button();
             this.buttonfactoryreset = new System.Windows.Forms.Button();
             this.buttonsurport = new System.Windows.Forms.Button();
+            this.buttoncleanreceive = new System.Windows.Forms.Button();
+            this.labeltxcnt = new System.Windows.Forms.Label();
+            this.labelrxcnt = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -78,9 +81,9 @@
             // comlist
             // 
             this.comlist.FormattingEnabled = true;
-            this.comlist.Location = new System.Drawing.Point(269, 8);
+            this.comlist.Location = new System.Drawing.Point(258, 8);
             this.comlist.Name = "comlist";
-            this.comlist.Size = new System.Drawing.Size(77, 20);
+            this.comlist.Size = new System.Drawing.Size(88, 20);
             this.comlist.TabIndex = 0;
             this.comlist.Text = "选择端口";
             this.comlist.MouseClick += new System.Windows.Forms.MouseEventHandler(this.comlist_MouseClick);
@@ -97,9 +100,9 @@
             // 
             // buttoncomopen
             // 
-            this.buttoncomopen.Location = new System.Drawing.Point(269, 34);
+            this.buttoncomopen.Location = new System.Drawing.Point(258, 34);
             this.buttoncomopen.Name = "buttoncomopen";
-            this.buttoncomopen.Size = new System.Drawing.Size(77, 20);
+            this.buttoncomopen.Size = new System.Drawing.Size(88, 20);
             this.buttoncomopen.TabIndex = 2;
             this.buttoncomopen.Text = "打开串口";
             this.buttoncomopen.UseVisualStyleBackColor = true;
@@ -304,6 +307,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxcomrecv.BackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxcomrecv.Location = new System.Drawing.Point(385, 102);
+            this.richTextBoxcomrecv.MaxLength = 5000;
             this.richTextBoxcomrecv.Name = "richTextBoxcomrecv";
             this.richTextBoxcomrecv.ReadOnly = true;
             this.richTextBoxcomrecv.Size = new System.Drawing.Size(403, 230);
@@ -334,9 +338,9 @@
             // textBoxsendcycle
             // 
             this.textBoxsendcycle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxsendcycle.Location = new System.Drawing.Point(508, 75);
+            this.textBoxsendcycle.Location = new System.Drawing.Point(466, 75);
             this.textBoxsendcycle.Name = "textBoxsendcycle";
-            this.textBoxsendcycle.Size = new System.Drawing.Size(100, 21);
+            this.textBoxsendcycle.Size = new System.Drawing.Size(59, 21);
             this.textBoxsendcycle.TabIndex = 25;
             this.textBoxsendcycle.Text = "1000";
             this.textBoxsendcycle.TextChanged += new System.EventHandler(this.textBoxsendcycle_TextChanged);
@@ -345,7 +349,7 @@
             // 
             this.checkBoxsendcycle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxsendcycle.AutoSize = true;
-            this.checkBoxsendcycle.Location = new System.Drawing.Point(623, 77);
+            this.checkBoxsendcycle.Location = new System.Drawing.Point(531, 77);
             this.checkBoxsendcycle.Name = "checkBoxsendcycle";
             this.checkBoxsendcycle.Size = new System.Drawing.Size(72, 16);
             this.checkBoxsendcycle.TabIndex = 26;
@@ -357,7 +361,7 @@
             // 
             this.labelsendcycle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelsendcycle.AutoSize = true;
-            this.labelsendcycle.Location = new System.Drawing.Point(415, 78);
+            this.labelsendcycle.Location = new System.Drawing.Point(383, 78);
             this.labelsendcycle.Name = "labelsendcycle";
             this.labelsendcycle.Size = new System.Drawing.Size(77, 12);
             this.labelsendcycle.TabIndex = 27;
@@ -420,12 +424,44 @@
             this.buttonsurport.TabIndex = 33;
             this.buttonsurport.Text = "查看支持型号";
             this.buttonsurport.UseVisualStyleBackColor = true;
+            this.buttonsurport.Click += new System.EventHandler(this.buttonsurport_Click);
+            // 
+            // buttoncleanreceive
+            // 
+            this.buttoncleanreceive.Location = new System.Drawing.Point(620, 73);
+            this.buttoncleanreceive.Name = "buttoncleanreceive";
+            this.buttoncleanreceive.Size = new System.Drawing.Size(75, 23);
+            this.buttoncleanreceive.TabIndex = 34;
+            this.buttoncleanreceive.Text = "清空接收区";
+            this.buttoncleanreceive.UseVisualStyleBackColor = true;
+            this.buttoncleanreceive.Click += new System.EventHandler(this.buttoncleanreceive_Click);
+            // 
+            // labeltxcnt
+            // 
+            this.labeltxcnt.AutoSize = true;
+            this.labeltxcnt.Location = new System.Drawing.Point(218, 320);
+            this.labeltxcnt.Name = "labeltxcnt";
+            this.labeltxcnt.Size = new System.Drawing.Size(29, 12);
+            this.labeltxcnt.TabIndex = 35;
+            this.labeltxcnt.Text = "Tx:0";
+            // 
+            // labelrxcnt
+            // 
+            this.labelrxcnt.AutoSize = true;
+            this.labelrxcnt.Location = new System.Drawing.Point(289, 320);
+            this.labelrxcnt.Name = "labelrxcnt";
+            this.labelrxcnt.Size = new System.Drawing.Size(29, 12);
+            this.labelrxcnt.TabIndex = 36;
+            this.labelrxcnt.Text = "Rx:0";
             // 
             // LoraUartTransferConfigTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(788, 332);
+            this.Controls.Add(this.labelrxcnt);
+            this.Controls.Add(this.labeltxcnt);
+            this.Controls.Add(this.buttoncleanreceive);
             this.Controls.Add(this.buttonsurport);
             this.Controls.Add(this.buttonfactoryreset);
             this.Controls.Add(this.buttonwriteparam);
@@ -504,6 +540,9 @@
         private System.Windows.Forms.Button buttonwriteparam;
         private System.Windows.Forms.Button buttonfactoryreset;
         private System.Windows.Forms.Button buttonsurport;
+        private System.Windows.Forms.Button buttoncleanreceive;
+        private System.Windows.Forms.Label labeltxcnt;
+        private System.Windows.Forms.Label labelrxcnt;
     }
 }
 

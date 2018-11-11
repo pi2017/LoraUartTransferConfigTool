@@ -100,22 +100,32 @@ namespace LoraUartTransferConfigTool
         {
 
         }
-
+        static Int64 comrecvtxcnt = 0;
         private void buttonsend_MouseClick(object sender, MouseEventArgs e)
         {
             if (serialPort.IsOpen == true)
             {
                 byte[] byteArray = System.Text.Encoding.Default.GetBytes(richTextBoxcomtrasmit.Text);
                 serialPort.Write(byteArray, 0, byteArray.Length);
+                comrecvtxcnt += byteArray.Length;
+                this.BeginInvoke(new Action(() =>
+                {
+                    labeltxcnt.Text = "Tx:" + Convert.ToString(comrecvtxcnt);
+                }));
             }
         }
-
+        
         private void uarttxtimer_Tick(object sender, EventArgs e)
         {
             if (serialPort.IsOpen == true)
             {
                 byte[] byteArray = System.Text.Encoding.Default.GetBytes(richTextBoxcomtrasmit.Text);
                 serialPort.Write(byteArray, 0, byteArray.Length);
+                comrecvtxcnt += byteArray.Length;
+                this.BeginInvoke(new Action(() =>
+                {
+                    labeltxcnt.Text = "Tx:" + Convert.ToString(comrecvtxcnt);
+                }));
             }
         }
 
@@ -152,7 +162,7 @@ namespace LoraUartTransferConfigTool
             {
                 time = int.Parse(textBoxsendcycle.Text);
                 uarttxtimer.Interval = time;  //单位ms
-                if (serialPort.IsOpen == true)
+                if ((serialPort.IsOpen == true) && (checkBoxsendcycle.Checked == true))
                 {
                     uarttxtimer.Start();     //timer1.Enabled=true也可
                 }
@@ -165,15 +175,16 @@ namespace LoraUartTransferConfigTool
             if (uarttxtimer.Enabled == true)
             {
                 uarttxtimer.Stop();
-                if (serialPort.IsOpen == true)
+                if ((serialPort.IsOpen == true) && (checkBoxsendcycle.Checked == true))
                 {
                     uarttxtimer.Start();
                 }
             }
         }
-
+        static Int64 comrecvrxcnt = 0;
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            
             if (serialPort.BytesToRead <= 0)
             {
                 return;
@@ -181,8 +192,10 @@ namespace LoraUartTransferConfigTool
             byte[] ReadBuf = new byte[serialPort.BytesToRead];
 
             serialPort.Read(ReadBuf, 0, ReadBuf.Length);
+            comrecvrxcnt += ReadBuf.Length;
             this.BeginInvoke(new Action(() =>
             {
+                labelrxcnt.Text = "Rx:" + Convert.ToString(comrecvrxcnt);
                 richTextBoxcomrecv.Text += System.Text.Encoding.Default.GetString(ReadBuf);
                 this.richTextBoxcomrecv.SelectionStart = this.richTextBoxcomrecv.TextLength;
                 this.richTextBoxcomrecv.ScrollToCaret();
@@ -192,6 +205,20 @@ namespace LoraUartTransferConfigTool
         private void linkLabelwebsite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://www.coltsmart.com");
+        }
+
+        private void buttonsurport_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("M32");
+        }
+
+        private void buttoncleanreceive_Click(object sender, EventArgs e)
+        {
+            richTextBoxcomrecv.Clear();
+            comrecvrxcnt = 0;
+            comrecvtxcnt = 0;
+            labelrxcnt.Text = "Rx:0";
+            labeltxcnt.Text = "Tx:0";
         }
     }
 }
