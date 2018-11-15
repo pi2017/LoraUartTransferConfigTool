@@ -16,7 +16,27 @@ namespace LoraUartTransferConfigTool
         {
             InitializeComponent();
         }
-        
+        public static void Delay(int milliSecond)
+        {
+            int start = Environment.TickCount;
+            while (Math.Abs(Environment.TickCount - start) < milliSecond)//毫秒
+            {
+                Application.DoEvents();//可执行某无聊的操作
+            }
+        }
+        public void Wait(int ms)
+        {
+            var timeout = DateTime.Now.AddMilliseconds(ms);
+            while (true)
+            {
+                //业务处理
+                if (DateTime.Now < timeout)
+                {
+                    //超时
+                    return;
+                }
+            }
+        }
         private void comlist_MouseClick(object sender, MouseEventArgs e)
         {
             SerialPort com = new SerialPort("COM1");
@@ -51,6 +71,8 @@ namespace LoraUartTransferConfigTool
                     serialPort.DataBits = 8;
                     serialPort.StopBits = StopBits.One;
                     serialPort.Parity = Parity.None;
+                    //serialPort.ReadTimeout = 200;
+                    serialPort.ReceivedBytesThreshold = 1;
                     //serialPort.NewLine = "\r\n";
                     try
                     {
@@ -181,25 +203,125 @@ namespace LoraUartTransferConfigTool
                 }
             }
         }
+        public static string byteToHexStr(byte[] bytes)
+        {
+            string returnStr = "";
+            if (bytes != null)
+            {
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    returnStr += bytes[i].ToString("X2");
+                }
+            }
+            return returnStr;
+        }
         static Int64 comrecvrxcnt = 0;
+        volatile byte[] ReadBuf = new byte[10];
+        volatile int ReadBufIndex = 0;
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            
             if (serialPort.BytesToRead <= 0)
             {
                 return;
             }
-            byte[] ReadBuf = new byte[serialPort.BytesToRead];
-
-            serialPort.Read(ReadBuf, 0, ReadBuf.Length);
-            comrecvrxcnt += ReadBuf.Length;
-            this.BeginInvoke(new Action(() =>
+            
+            if (checkBoxuarttransfer.Checked == false)
             {
-                labelrxcnt.Text = "Rx:" + Convert.ToString(comrecvrxcnt);
-                richTextBoxcomrecv.Text += System.Text.Encoding.Default.GetString(ReadBuf);
-                this.richTextBoxcomrecv.SelectionStart = this.richTextBoxcomrecv.TextLength;
-                this.richTextBoxcomrecv.ScrollToCaret();
-            }));
+                while (serialPort.BytesToRead > 0)
+                {
+                    byte[] bytea = new byte[1];
+                    serialPort.Read(bytea, 0, 1);
+                    comrecvrxcnt += 1;
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        labelrxcnt.Text = "Rx:" + Convert.ToString(comrecvrxcnt);
+                        richTextBoxcomrecv.Text += byteToHexStr(bytea);
+                        richTextBoxcomrecv.Text += " ";
+                        this.richTextBoxcomrecv.SelectionStart = this.richTextBoxcomrecv.TextLength;
+                        this.richTextBoxcomrecv.ScrollToCaret();
+                    }));
+                    if (ReadBufIndex < 10)
+                    {
+                        ReadBuf[ReadBufIndex++] = bytea[0]; //return;
+                    }
+                    //ReadBuf[ReadBufIndex++] = bytea[0];
+                }
+                
+                if ((ReadBuf[0] == 0xC3) && (ReadBufIndex >= 10))
+                {
+                    timerrxtimeout.Stop();
+                    int addrint, channel;
+                    byte[] addrarray2 = new byte[4];
+                    byte[] channelarray2 = new byte[4];
+                    addrarray2[0] = ReadBuf[1];
+                    addrarray2[1] = ReadBuf[2];
+                    addrint = System.BitConverter.ToInt32(addrarray2, 0);
+                    channelarray2[0] = ReadBuf[4];
+                    channel = System.BitConverter.ToInt32(channelarray2, 0);
+
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        textBoxaddr.Text = addrint.ToString();
+                        comboBoxuartparity.SelectedIndex = (ReadBuf[3] & 0xc0) >> 6;
+                        comboBoxuartbaud.SelectedIndex = (ReadBuf[3] & 0x38) >> 3;
+                        comboBoxairbaud.SelectedIndex = (ReadBuf[3] & 0x07) >> 0;
+                        textBoxchannel.Text = channel.ToString();
+                        comboBoxtransfertype.SelectedIndex = (ReadBuf[5] & 0x80) >> 7;
+                        comboBoxiodrive.SelectedIndex = (ReadBuf[5] & 0x40) >> 6;
+                        comboBoxwakeuptime.SelectedIndex = (ReadBuf[5] & 0x38) >> 3;
+                        comboBoxfecon.SelectedIndex = (ReadBuf[5] & 0x04) >> 2;
+                        comboBoxtxpower.SelectedIndex = (ReadBuf[5] & 0x03) >> 0;
+                    }));
+                    MessageBox.Show("读取参数成功");
+                    ReadBufIndex = 0;
+                }
+                else if (((ReadBuf[0] == 0xC0) || (ReadBuf[0] == 0xC2)) && (ReadBufIndex >= 6))
+                {
+                    timerrxtimeout.Stop();
+                    byte[] addrarray = new byte[4];
+                    addrarray[0] = ReadBuf[1];
+                    addrarray[1] = ReadBuf[2];
+                    Int32 addrint;
+                    addrint = System.BitConverter.ToInt32(addrarray, 0);
+                    Int32 channel;
+                    byte[] channelarray = new byte[4];
+                    channelarray[0] = ReadBuf[4];
+                    channel = System.BitConverter.ToInt32(channelarray, 0);
+
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        textBoxaddr.Text = "0x" + addrint.ToString();
+                        comboBoxuartparity.SelectedIndex = ReadBuf[3] & 0xc0 >> 6;
+                        comboBoxuartbaud.SelectedIndex = ReadBuf[3] & 0x38 >> 3;
+                        comboBoxairbaud.SelectedIndex = ReadBuf[3] & 0x07 >> 0;
+                        textBoxchannel.Text = "0x" + channel.ToString();
+                        comboBoxtransfertype.SelectedIndex = (ReadBuf[5] & 0x80) >> 7;
+                        comboBoxiodrive.SelectedIndex = (ReadBuf[5] & 0x40) >> 6;
+                        comboBoxwakeuptime.SelectedIndex = (ReadBuf[5] & 0x38) >> 3;
+                        comboBoxfecon.SelectedIndex = (ReadBuf[5] & 0x04) >> 2;
+                        comboBoxtxpower.SelectedIndex = (ReadBuf[5] & 0x03) >> 0;
+                    }));
+                    MessageBox.Show("写入参数成功");
+                    ReadBufIndex = 0;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                byte[] ReadBuf = new byte[serialPort.BytesToRead];
+                serialPort.Read(ReadBuf, 0, ReadBuf.Length);
+                comrecvrxcnt += ReadBuf.Length;
+                this.BeginInvoke(new Action(() =>
+                {
+                    labelrxcnt.Text = "Rx:" + Convert.ToString(comrecvrxcnt);
+                    richTextBoxcomrecv.Text += System.Text.Encoding.Default.GetString(ReadBuf);
+                    this.richTextBoxcomrecv.SelectionStart = this.richTextBoxcomrecv.TextLength;
+                    this.richTextBoxcomrecv.ScrollToCaret();
+                }));
+            }
         }
 
         private void linkLabelwebsite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -219,6 +341,141 @@ namespace LoraUartTransferConfigTool
             comrecvtxcnt = 0;
             labelrxcnt.Text = "Rx:0";
             labeltxcnt.Text = "Tx:0";
+        }
+
+        private void checkBoxuarttransfer_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxuarttransfer.Checked == true)
+            {
+                groupBoxconfigarea.Enabled = false;
+                groupBoxuarttransfer.Enabled = true;
+            }
+            else
+            {
+                groupBoxconfigarea.Enabled = true;
+                groupBoxuarttransfer.Enabled = false;
+            }
+
+        }
+
+        private void buttonwriteparam_Click(object sender, EventArgs e)
+        {
+            if (serialPort.IsOpen == true)
+            {
+                ReadBufIndex = 0;
+                serialPort.DiscardInBuffer();
+                byte[] byteArray = { 0xc3, 0xc3, 0xc3, 0xc1, 0xc1, 0xc1 };
+                serialPort.Write(byteArray, 0, byteArray.Length);
+                comrecvtxcnt += byteArray.Length;
+                labeltxcnt.Text = "Tx:" + Convert.ToString(comrecvtxcnt);
+                timerrxtimeout.Interval = 1000;  //单位ms
+                timerrxtimeout.Start();     //timer1.Enabled=true也可
+            }
+        }
+
+        private void buttonreadparam_Click(object sender, EventArgs e)
+        {
+            if (serialPort.IsOpen == true)
+            {
+                ReadBufIndex = 0;
+                serialPort.DiscardInBuffer();
+                byte[] byteArray = { 0xc3, 0xc3, 0xc3, 0xc1, 0xc1, 0xc1 };
+                serialPort.Write(byteArray, 0, byteArray.Length);
+                comrecvtxcnt += byteArray.Length;
+                labeltxcnt.Text = "Tx:" + Convert.ToString(comrecvtxcnt);
+                
+                timerrxtimeout.Interval = 1000;  //单位ms
+                timerrxtimeout.Start();     //timer1.Enabled=true也可
+            }
+        }
+
+        private void buttonfactoryreset_Click(object sender, EventArgs e)
+        {
+            if (serialPort.IsOpen == true)
+            {
+                ReadBufIndex = 0;
+                serialPort.DiscardInBuffer();
+                byte[] byteArray = { 0xC0, 0x00, 0x00, 0x1A, 0x17, 0x44 };
+                serialPort.Write(byteArray, 0, byteArray.Length);
+                comrecvtxcnt += byteArray.Length;
+                labeltxcnt.Text = "Tx:" + Convert.ToString(comrecvtxcnt);
+                timerrxtimeout.Interval = 1000;  //单位ms
+                timerrxtimeout.Start();     //timer1.Enabled=true也可
+            }
+        }
+
+        private void timerrxtimeout_Tick(object sender, EventArgs e)
+        {
+            timerrxtimeout.Stop();
+            ReadBufIndex = serialPort.Read(ReadBuf, 0, 10);
+            
+            if ((ReadBuf[0] == 0xC3) && (ReadBufIndex >= 10))
+            {
+                timerrxtimeout.Stop();
+                int addrint, channel;
+                byte[] addrarray2 = new byte[4];
+                byte[] channelarray2 = new byte[4];
+                addrarray2[0] = ReadBuf[1];
+                addrarray2[1] = ReadBuf[2];
+                addrint = System.BitConverter.ToInt32(addrarray2, 0);
+                channelarray2[0] = ReadBuf[4];
+                channel = System.BitConverter.ToInt32(channelarray2, 0);
+
+                this.BeginInvoke(new Action(() =>
+                {
+                    textBoxaddr.Text = addrint.ToString();
+                    comboBoxuartparity.SelectedIndex = (ReadBuf[3] & 0xc0) >> 6;
+                    comboBoxuartbaud.SelectedIndex = (ReadBuf[3] & 0x38) >> 3;
+                    comboBoxairbaud.SelectedIndex = (ReadBuf[3] & 0x07) >> 0;
+                    textBoxchannel.Text = channel.ToString();
+                    comboBoxtransfertype.SelectedIndex = (ReadBuf[5] & 0x80) >> 7;
+                    comboBoxiodrive.SelectedIndex = (ReadBuf[5] & 0x40) >> 6;
+                    comboBoxwakeuptime.SelectedIndex = (ReadBuf[5] & 0x38) >> 3;
+                    comboBoxfecon.SelectedIndex = (ReadBuf[5] & 0x04) >> 2;
+                    comboBoxtxpower.SelectedIndex = (ReadBuf[5] & 0x03) >> 0;
+                }));
+                MessageBox.Show("读取参数成功");
+                ReadBufIndex = 0;
+                return;
+            }
+            else if (((ReadBuf[0] == 0xC0) || (ReadBuf[0] == 0xC2)) && (ReadBufIndex >= 6))
+            {
+                timerrxtimeout.Stop();
+                byte[] addrarray = new byte[4];
+                addrarray[0] = ReadBuf[1];
+                addrarray[1] = ReadBuf[2];
+                Int32 addrint;
+                addrint = System.BitConverter.ToInt32(addrarray, 0);
+                Int32 channel;
+                byte[] channelarray = new byte[4];
+                channelarray[0] = ReadBuf[4];
+                channel = System.BitConverter.ToInt32(channelarray, 0);
+
+                this.BeginInvoke(new Action(() =>
+                {
+                    textBoxaddr.Text = "0x" + addrint.ToString();
+                    comboBoxuartparity.SelectedIndex = ReadBuf[3] & 0xc0 >> 6;
+                    comboBoxuartbaud.SelectedIndex = ReadBuf[3] & 0x38 >> 3;
+                    comboBoxairbaud.SelectedIndex = ReadBuf[3] & 0x07 >> 0;
+                    textBoxchannel.Text = "0x" + channel.ToString();
+                    comboBoxtransfertype.SelectedIndex = (ReadBuf[5] & 0x80) >> 7;
+                    comboBoxiodrive.SelectedIndex = (ReadBuf[5] & 0x40) >> 6;
+                    comboBoxwakeuptime.SelectedIndex = (ReadBuf[5] & 0x38) >> 3;
+                    comboBoxfecon.SelectedIndex = (ReadBuf[5] & 0x04) >> 2;
+                    comboBoxtxpower.SelectedIndex = (ReadBuf[5] & 0x03) >> 0;
+                }));
+                MessageBox.Show("写入参数成功");
+                ReadBufIndex = 0;
+                return;
+            }
+            else
+            {
+                //return;
+            }
+            
+            ReadBufIndex = 0;
+            timerrxtimeout.Stop();
+            MessageBox.Show("模块无响应");
         }
     }
 }
