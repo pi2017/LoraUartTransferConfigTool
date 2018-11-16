@@ -84,6 +84,10 @@
             // 
             this.uarttxtimer.Tick += new System.EventHandler(this.uarttxtimer_Tick);
             // 
+            // serialPort
+            // 
+            this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
+            // 
             // comlist
             // 
             this.comlist.FormattingEnabled = true;
@@ -575,7 +579,7 @@
             this.textBoxaddr.Name = "textBoxaddr";
             this.textBoxaddr.Size = new System.Drawing.Size(76, 21);
             this.textBoxaddr.TabIndex = 41;
-            this.textBoxaddr.Text = "0x0000";
+            this.textBoxaddr.Text = "0";
             // 
             // textBoxchannel
             // 
