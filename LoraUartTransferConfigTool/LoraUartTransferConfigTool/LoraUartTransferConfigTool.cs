@@ -62,9 +62,9 @@ namespace LoraUartTransferConfigTool
         {
             if (comlist.SelectedItem == null)
                     return;
-            if (comlist.Text != "-请选择端口-")
+            if (comlist.Text != "-Select port-")
             {
-                if (buttoncomopen.Text == "打开串口")
+                if (buttoncomopen.Text == "Open serial")
                 {
                     serialPort.PortName = comlist.SelectedItem.ToString();
                     serialPort.BaudRate = 9600;
@@ -94,11 +94,11 @@ namespace LoraUartTransferConfigTool
                                     catch
                                     {
                                         checkBoxsendcycle.Checked = false;
-                                        MessageBox.Show("请输入正确的时间，单位：ms");
+                                        MessageBox.Show("Enter the correct time：ms");
                                     }
                                 }
                             }
-                            buttoncomopen.Text = "关闭串口";
+                            buttoncomopen.Text = "Close serial";
                         }
                     }
                     catch (Exception ex)
@@ -113,7 +113,7 @@ namespace LoraUartTransferConfigTool
                     checkBoxsendcycle.Checked = false;
                     uarttxtimer.Stop();
                     serialPort.Close();
-                    buttoncomopen.Text = "打开串口";
+                    buttoncomopen.Text = "Open serial";
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace LoraUartTransferConfigTool
                 catch
                 {
                     checkBoxsendcycle.Checked = false;
-                    MessageBox.Show("请输入正确的时间，单位：ms");
+                    MessageBox.Show("Enter the correct time：ms");
                 }
             }
             else
@@ -192,7 +192,7 @@ namespace LoraUartTransferConfigTool
             catch
             {
                 checkBoxsendcycle.Checked = false;
-                MessageBox.Show("请输入正确的时间，单位：ms");
+                MessageBox.Show("Enter the correct time：ms");
             }
             if (uarttxtimer.Enabled == true)
             {
@@ -275,7 +275,7 @@ namespace LoraUartTransferConfigTool
                         this.richTextBoxcomrecv.SelectionStart = this.richTextBoxcomrecv.TextLength;
                         this.richTextBoxcomrecv.ScrollToCaret();
                     }));
-                    MessageBox.Show("读取参数成功");
+                    MessageBox.Show("Read parameter successfully");
                     ReadBufIndex = 0;
                 }
                 else if (((ReadBuf[0] == 0xC0) || (ReadBuf[0] == 0xC2)) && (ReadBufIndex >= 6))
@@ -307,7 +307,7 @@ namespace LoraUartTransferConfigTool
                         this.richTextBoxcomrecv.SelectionStart = this.richTextBoxcomrecv.TextLength;
                         this.richTextBoxcomrecv.ScrollToCaret();
                     }));
-                    MessageBox.Show("写入参数成功");
+                    MessageBox.Show("Successfully write param");
                     ReadBufIndex = 0;
                 }
                 else
@@ -446,7 +446,7 @@ namespace LoraUartTransferConfigTool
         {
             ReadBufIndex = 0;
             timerrxtimeout.Stop();
-            MessageBox.Show("模块无响应");
+            MessageBox.Show("Module is not responding");
         }
     }
 }

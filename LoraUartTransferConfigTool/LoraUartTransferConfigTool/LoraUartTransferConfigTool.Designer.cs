@@ -95,7 +95,7 @@
             this.comlist.Name = "comlist";
             this.comlist.Size = new System.Drawing.Size(88, 20);
             this.comlist.TabIndex = 0;
-            this.comlist.Text = "选择端口";
+            this.comlist.Text = "COM LIST";
             this.comlist.MouseClick += new System.Windows.Forms.MouseEventHandler(this.comlist_MouseClick);
             // 
             // logo
@@ -114,7 +114,7 @@
             this.buttoncomopen.Name = "buttoncomopen";
             this.buttoncomopen.Size = new System.Drawing.Size(88, 20);
             this.buttoncomopen.TabIndex = 2;
-            this.buttoncomopen.Text = "打开串口";
+            this.buttoncomopen.Text = "Open port";
             this.buttoncomopen.UseVisualStyleBackColor = true;
             this.buttoncomopen.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -152,7 +152,7 @@
             this.labeluartbaud.Name = "labeluartbaud";
             this.labeluartbaud.Size = new System.Drawing.Size(53, 12);
             this.labeluartbaud.TabIndex = 5;
-            this.labeluartbaud.Text = "串口速率";
+            this.labeluartbaud.Text = "Uart baud";
             // 
             // labeluartparity
             // 
@@ -161,7 +161,7 @@
             this.labeluartparity.Name = "labeluartparity";
             this.labeluartparity.Size = new System.Drawing.Size(53, 12);
             this.labeluartparity.TabIndex = 6;
-            this.labeluartparity.Text = "串口校验";
+            this.labeluartparity.Text = "Uart parity";
             // 
             // comboBoxuartparity
             // 
@@ -183,7 +183,7 @@
             this.labelairbaud.Name = "labelairbaud";
             this.labelairbaud.Size = new System.Drawing.Size(53, 12);
             this.labelairbaud.TabIndex = 8;
-            this.labelairbaud.Text = "无线速率";
+            this.labelairbaud.Text = "Wireless baud";
             // 
             // comboBoxairbaud
             // 
@@ -209,7 +209,7 @@
             this.labeltxpower.Name = "labeltxpower";
             this.labeltxpower.Size = new System.Drawing.Size(53, 12);
             this.labeltxpower.TabIndex = 10;
-            this.labeltxpower.Text = "发射功率";
+            this.labeltxpower.Text = "TX power";
             // 
             // comboBoxtxpower
             // 
@@ -229,43 +229,43 @@
             this.labelfecon.AutoSize = true;
             this.labelfecon.Location = new System.Drawing.Point(208, 130);
             this.labelfecon.Name = "labelfecon";
-            this.labelfecon.Size = new System.Drawing.Size(53, 12);
+            this.labelfecon.Size = new System.Drawing.Size(73, 12);
             this.labelfecon.TabIndex = 12;
-            this.labelfecon.Text = "前向纠错";
+            this.labelfecon.Text = "FEC";
             // 
             // labeltransfertype
             // 
             this.labeltransfertype.AutoSize = true;
             this.labeltransfertype.Location = new System.Drawing.Point(208, 158);
             this.labeltransfertype.Name = "labeltransfertype";
-            this.labeltransfertype.Size = new System.Drawing.Size(53, 12);
+            this.labeltransfertype.Size = new System.Drawing.Size(73, 12);
             this.labeltransfertype.TabIndex = 13;
-            this.labeltransfertype.Text = "传输方式";
+            this.labeltransfertype.Text = "Transfer method";
             // 
             // labelwakeuptime
             // 
             this.labelwakeuptime.AutoSize = true;
             this.labelwakeuptime.Location = new System.Drawing.Point(208, 186);
             this.labelwakeuptime.Name = "labelwakeuptime";
-            this.labelwakeuptime.Size = new System.Drawing.Size(53, 12);
+            this.labelwakeuptime.Size = new System.Drawing.Size(73, 12);
             this.labelwakeuptime.TabIndex = 14;
-            this.labelwakeuptime.Text = "唤醒时间";
+            this.labelwakeuptime.Text = "Wake up time";
             // 
             // labelIOdrive
             // 
             this.labelIOdrive.AutoSize = true;
             this.labelIOdrive.Location = new System.Drawing.Point(208, 214);
             this.labelIOdrive.Name = "labelIOdrive";
-            this.labelIOdrive.Size = new System.Drawing.Size(53, 12);
+            this.labelIOdrive.Size = new System.Drawing.Size(73, 12);
             this.labelIOdrive.TabIndex = 15;
-            this.labelIOdrive.Text = "I O 驱动";
+            this.labelIOdrive.Text = "I O drive";
             // 
             // comboBoxfecon
             // 
             this.comboBoxfecon.FormattingEnabled = true;
             this.comboBoxfecon.Items.AddRange(new object[] {
-            "关闭",
-            "打开"});
+            "shut down",
+            "turn on"});
             this.comboBoxfecon.Location = new System.Drawing.Point(267, 127);
             this.comboBoxfecon.Name = "comboBoxfecon";
             this.comboBoxfecon.Size = new System.Drawing.Size(79, 20);
@@ -275,8 +275,8 @@
             // 
             this.comboBoxtransfertype.FormattingEnabled = true;
             this.comboBoxtransfertype.Items.AddRange(new object[] {
-            "透传",
-            "定点"});
+            "Penetrade",
+            "Fixed point"});
             this.comboBoxtransfertype.Location = new System.Drawing.Point(267, 155);
             this.comboBoxtransfertype.Name = "comboBoxtransfertype";
             this.comboBoxtransfertype.Size = new System.Drawing.Size(79, 20);
@@ -303,8 +303,8 @@
             // 
             this.comboBoxiodrive.FormattingEnabled = true;
             this.comboBoxiodrive.Items.AddRange(new object[] {
-            "开漏",
-            "推挽"});
+            "Open drain",
+            "Push-pull"});
             this.comboBoxiodrive.Location = new System.Drawing.Point(267, 211);
             this.comboBoxiodrive.Name = "comboBoxiodrive";
             this.comboBoxiodrive.Size = new System.Drawing.Size(79, 20);
@@ -319,7 +319,7 @@
             this.labelcopyright.Name = "labelcopyright";
             this.labelcopyright.Size = new System.Drawing.Size(257, 12);
             this.labelcopyright.TabIndex = 20;
-            this.labelcopyright.Text = "本软件著作权归上海鸣驹智能科技有限公司所有";
+            this.labelcopyright.Text = "The Copyright 2018(c)";
             // 
             // richTextBoxmoduleinfo
             // 
@@ -330,7 +330,7 @@
             this.richTextBoxmoduleinfo.ReadOnly = true;
             this.richTextBoxmoduleinfo.Size = new System.Drawing.Size(346, 89);
             this.richTextBoxmoduleinfo.TabIndex = 21;
-            this.richTextBoxmoduleinfo.Text = "模块出厂测试性能参数如下：";
+            this.richTextBoxmoduleinfo.Text = "Module factory test performance parameters are as follows：";
             // 
             // richTextBoxcomrecv
             // 
@@ -344,7 +344,7 @@
             this.richTextBoxcomrecv.ReadOnly = true;
             this.richTextBoxcomrecv.Size = new System.Drawing.Size(403, 312);
             this.richTextBoxcomrecv.TabIndex = 22;
-            this.richTextBoxcomrecv.Text = "串口接收窗口";
+            this.richTextBoxcomrecv.Text = "Serial port receiving window";
             // 
             // richTextBoxcomtrasmit
             // 
@@ -354,7 +354,7 @@
             this.richTextBoxcomtrasmit.Name = "richTextBoxcomtrasmit";
             this.richTextBoxcomtrasmit.Size = new System.Drawing.Size(403, 54);
             this.richTextBoxcomtrasmit.TabIndex = 23;
-            this.richTextBoxcomtrasmit.Text = "hello\n";
+            this.richTextBoxcomtrasmit.Text = "Hello Ukraine\n";
             // 
             // buttonsend
             // 
@@ -363,7 +363,7 @@
             this.buttonsend.Name = "buttonsend";
             this.buttonsend.Size = new System.Drawing.Size(75, 23);
             this.buttonsend.TabIndex = 24;
-            this.buttonsend.Text = "发送";
+            this.buttonsend.Text = "Send";
             this.buttonsend.UseVisualStyleBackColor = true;
             this.buttonsend.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonsend_MouseClick);
             // 
@@ -385,7 +385,7 @@
             this.checkBoxsendcycle.Name = "checkBoxsendcycle";
             this.checkBoxsendcycle.Size = new System.Drawing.Size(72, 16);
             this.checkBoxsendcycle.TabIndex = 26;
-            this.checkBoxsendcycle.Text = "周期发送";
+            this.checkBoxsendcycle.Text = "Periodic transmission";
             this.checkBoxsendcycle.UseVisualStyleBackColor = true;
             this.checkBoxsendcycle.CheckedChanged += new System.EventHandler(this.checkBoxsendcycle_CheckedChanged);
             // 
@@ -397,7 +397,7 @@
             this.labelsendcycle.Name = "labelsendcycle";
             this.labelsendcycle.Size = new System.Drawing.Size(77, 12);
             this.labelsendcycle.TabIndex = 27;
-            this.labelsendcycle.Text = "发送周期(ms)";
+            this.labelsendcycle.Text = "Send cycle (ms)";
             // 
             // labelwebaddr
             // 
@@ -408,7 +408,7 @@
             this.labelwebaddr.Name = "labelwebaddr";
             this.labelwebaddr.Size = new System.Drawing.Size(65, 12);
             this.labelwebaddr.TabIndex = 28;
-            this.labelwebaddr.Text = "官方网站：";
+            this.labelwebaddr.Text = "Web address：";
             // 
             // linkLabelwebsite
             // 
@@ -427,7 +427,7 @@
             this.buttonreadparam.Name = "buttonreadparam";
             this.buttonreadparam.Size = new System.Drawing.Size(75, 23);
             this.buttonreadparam.TabIndex = 30;
-            this.buttonreadparam.Text = "读取参数";
+            this.buttonreadparam.Text = "Read param";
             this.buttonreadparam.UseVisualStyleBackColor = true;
             this.buttonreadparam.Click += new System.EventHandler(this.buttonreadparam_Click);
             // 
@@ -437,7 +437,7 @@
             this.buttonwriteparam.Name = "buttonwriteparam";
             this.buttonwriteparam.Size = new System.Drawing.Size(75, 23);
             this.buttonwriteparam.TabIndex = 31;
-            this.buttonwriteparam.Text = "写入参数";
+            this.buttonwriteparam.Text = "Write param";
             this.buttonwriteparam.UseVisualStyleBackColor = true;
             this.buttonwriteparam.Click += new System.EventHandler(this.buttonwriteparam_Click);
             // 
@@ -447,7 +447,7 @@
             this.buttonfactoryreset.Name = "buttonfactoryreset";
             this.buttonfactoryreset.Size = new System.Drawing.Size(75, 23);
             this.buttonfactoryreset.TabIndex = 32;
-            this.buttonfactoryreset.Text = "恢复出厂设置";
+            this.buttonfactoryreset.Text = "Factory reset";
             this.buttonfactoryreset.UseVisualStyleBackColor = true;
             this.buttonfactoryreset.Click += new System.EventHandler(this.buttonfactoryreset_Click);
             // 
@@ -457,7 +457,7 @@
             this.buttonsurport.Name = "buttonsurport";
             this.buttonsurport.Size = new System.Drawing.Size(88, 23);
             this.buttonsurport.TabIndex = 33;
-            this.buttonsurport.Text = "查看支持型号";
+            this.buttonsurport.Text = "Support model";
             this.buttonsurport.UseVisualStyleBackColor = true;
             this.buttonsurport.Click += new System.EventHandler(this.buttonsurport_Click);
             // 
@@ -468,7 +468,7 @@
             this.buttoncleanreceive.Name = "buttoncleanreceive";
             this.buttoncleanreceive.Size = new System.Drawing.Size(75, 23);
             this.buttoncleanreceive.TabIndex = 34;
-            this.buttoncleanreceive.Text = "清空接收区";
+            this.buttoncleanreceive.Text = "Empty the receiving";
             this.buttoncleanreceive.UseVisualStyleBackColor = true;
             this.buttoncleanreceive.Click += new System.EventHandler(this.buttoncleanreceive_Click);
             // 
@@ -497,7 +497,7 @@
             this.checkBoxuarttransfer.Name = "checkBoxuarttransfer";
             this.checkBoxuarttransfer.Size = new System.Drawing.Size(84, 16);
             this.checkBoxuarttransfer.TabIndex = 37;
-            this.checkBoxuarttransfer.Text = "使能收发区";
+            this.checkBoxuarttransfer.Text = "Enable transceiver";
             this.checkBoxuarttransfer.UseVisualStyleBackColor = true;
             this.checkBoxuarttransfer.CheckedChanged += new System.EventHandler(this.checkBoxuarttransfer_CheckedChanged);
             // 
@@ -519,7 +519,7 @@
             this.groupBoxuarttransfer.Size = new System.Drawing.Size(413, 414);
             this.groupBoxuarttransfer.TabIndex = 38;
             this.groupBoxuarttransfer.TabStop = false;
-            this.groupBoxuarttransfer.Text = "收发测试区";
+            this.groupBoxuarttransfer.Text = "Transceiver test";
             // 
             // groupBoxconfigarea
             // 
@@ -562,7 +562,7 @@
             this.labeladdr.Name = "labeladdr";
             this.labeladdr.Size = new System.Drawing.Size(53, 12);
             this.labeladdr.TabIndex = 39;
-            this.labeladdr.Text = "模块地址";
+            this.labeladdr.Text = "Module address";
             // 
             // labelchannel
             // 
@@ -571,7 +571,7 @@
             this.labelchannel.Name = "labelchannel";
             this.labelchannel.Size = new System.Drawing.Size(53, 12);
             this.labelchannel.TabIndex = 40;
-            this.labelchannel.Text = "频率信道";
+            this.labelchannel.Text = "Frequency channel";
             // 
             // textBoxaddr
             // 
